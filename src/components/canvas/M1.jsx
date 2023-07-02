@@ -18,19 +18,37 @@ const STARTING_SCALE = 0.3
 
 export const M1 = ({ ...props }) => {
   const { nodes, materials } = useGLTF('/14mbp.glb')
-  const backgroundTexture = useTexture('/bg.jpg')
+  const backgroundTexture = useTexture('/bgreal.jpg')
 
+  const scroll = useScroll()
+  const { width, height } = useThree((state) => state.viewport)
+  const camera = useThree((state) => state.camera)
   const mbp = useRef()
   const mbpScreen = useRef()
   const spotLight = useRef()
   const displayRef = useRef()
 
+  useFrame((state, delta) => {
+    const openRange = scroll.range(0, 1 / 8)
+    const openZoomRange = scroll.range(1 / 16, 1 / 16)
+    const zoomInRange = scroll.range(2 / 8, 1 / 8)
+
+    mbpScreen.current.rotation.x = 0 - (Math.PI / 2) * openRange
+    camera.position.setZ(20 - 16 * zoomInRange ** 2 - 4 * openZoomRange)
+    // displayRef.current.material.roughness = zoomInRange * 5
+    // displayRef.current.material.metalness = 1 - zoomInRange
+    displayRef.current.material.emissiveIntensity = 1 - zoomInRange
+    camera.position.setY(zoomInRange == 1 ? 50 : 0) // reduces gpu usage for rest of page
+    console.log(mbp.current.visible)
+  })
+  console.log(mbp.current)
+
   return (
     <>
       <spotLight ref={spotLight} penumbra={1} position={[0, 10, 0]} intensity={0} />
       {/* <pointLight position={[0, 10, -5]} intensity={0.1} /> */}
-      <group {...props} ref={mbp} position={[0, -4, 0]} scale={0.25} dispose={null}>
-        <group ref={mbpScreen} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.7, -10.8]}>
+      <group {...props} ref={mbp} position={[0, -3, 0]} scale={0.3} dispose={null}>
+        <group ref={mbpScreen} position={[0, 0.7, -10.8]}>
           <group rotation={[0, 0, 0]} position={[0, -0.7, 10.8]}>
             <mesh geometry={nodes.apple_apple_logo_M_0.geometry} material={materials.PaletteMaterial001} />
             <group position={[0, -10.01, -11.52]} rotation={[Math.PI / 2, 0, 0]}>
