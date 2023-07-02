@@ -11,12 +11,13 @@ import {
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { forwardRef, useRef } from 'react'
 import * as THREE from 'three'
+import { lerp } from 'three/src/math/MathUtils'
 
 const { damp, degToRad } = THREE.MathUtils
 
 const STARTING_SCALE = 0.3
 
-export const M1 = ({ ...props }) => {
+export const M1 = ({ page, ...props }) => {
   const { nodes, materials } = useGLTF('/14mbp.glb')
   const backgroundTexture = useTexture('/bgreal.jpg')
 
@@ -29,17 +30,14 @@ export const M1 = ({ ...props }) => {
   const displayRef = useRef()
 
   useFrame((state, delta) => {
-    const openRange = scroll.range(0, 1 / 8)
-    const openZoomRange = scroll.range(1 / 16, 1 / 16)
-    const zoomInRange = scroll.range(2 / 8, 1 / 8)
-
-    mbpScreen.current.rotation.x = 0 - (Math.PI / 2) * openRange
-    camera.position.setZ(20 - 16 * zoomInRange ** 2 - 4 * openZoomRange)
+    // mbpScreen.current.rotation.x = 0 - (Math.PI / 2) * openRange
+    mbpScreen.current.rotation.x = lerp(mbpScreen.current.rotation.x, page == 1 ? -Math.PI / 2 : 0, 0.05)
+    // camera.position.setZ(20 - 16 * zoomInRange ** 2 - 4 * openZoomRange)
     // displayRef.current.material.roughness = zoomInRange * 5
     // displayRef.current.material.metalness = 1 - zoomInRange
-    displayRef.current.material.emissiveIntensity = 1 - zoomInRange
-    camera.position.setY(zoomInRange == 1 ? 50 : 0) // reduces gpu usage for rest of page
-    console.log(mbp.current.visible)
+    // displayRef.current.material.emissiveIntensity = 1 - zoomInRange
+    // camera.position.setY(zoomInRange == 1 ? 50 : 0) // reduces gpu usage for rest of page
+    // console.log(mbp.current.visible)
   })
   console.log(mbp.current)
 
