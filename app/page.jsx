@@ -1,45 +1,47 @@
 'use client'
 
-import { Scroll, ScrollControls, MeshReflectorMaterial, Environment, Html, useProgress } from '@react-three/drei'
+import { Environment, PerformanceMonitor } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import dynamic from 'next/dynamic'
-import { ScrollText, ScrollTextElement } from '@/components/animations/ScrollingText'
-import { JetBrains_Mono } from 'next/font/google'
-import TypingText from '@/components/animations/TypingText'
 import Projects from '@/components/Projects'
 import Experience from '@/components/Experience'
 import Navbar from '@/components/layout/Navbar'
 import AboutMe from '@/components/AboutMe'
 import { useInView } from 'react-intersection-observer'
-import { useState } from 'react'
-
-const jbMono = JetBrains_Mono({ subsets: ['latin'] })
+import { useEffect, useState } from 'react'
 
 const M1 = dynamic(() => import('@/components/canvas/M1').then((mod) => mod.M1), { ssr: false })
 
 export default function Page() {
   const [viewing, setViewing] = useState('home')
+  const [dpr, setDPR] = useState(2)
 
-  const [homeRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('home') })
+  const [homeRef, homeInView] = useInView({ threshold: 0.1, onChange: (v) => v && setViewing('home') })
   const [aboutMeRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('aboutme') })
   const [projectsRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('projects') })
   const [experienceRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('experience') })
-  const [contactRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('contact') })
+
+  // set low dpr when not looking at home
+  useEffect(() => {
+    setDPR(homeInView ? 2 : 0.5)
+  }, [homeInView])
 
   return (
     <div className="w-screen" >
-      <div className="w-screen relative" style={{ height: '200vh' }} ref={homeRef} >
-        <div className="absolute w-screen h-screen z-50 text-white flex flex-col items-center justify-center pb-16">
-          <TypingText delay={1000} finalText={'Addy Ireland'} speed={100} />
-          <ScrollText>
-            <ScrollTextElement>19 years old</ScrollTextElement>
-            <ScrollTextElement>penn state university</ScrollTextElement>
-            <ScrollTextElement>computer science</ScrollTextElement>
-            <ScrollTextElement>brother of alpha chi rho</ScrollTextElement>
-          </ScrollText>
-        </div>
-        <div className="sticky h-screen w-screen z-40 top-0">
-          <Canvas shadows dpr={[2, 2]} camera={{ position: [0, 0, 20], fov: 30 }} style={{ width: '100vw', height: '100vh' }}>
+      <div className="w-screen relative" style={{ height: '225vh' }} >
+        <div className="sticky h-screen w-screen z-40 top-0 snap-y" ref={homeRef}>
+          <Canvas
+            shadows
+            dpr={dpr}
+            camera={{
+              position: [0, 0, 20],
+              fov: 30
+            }}
+            style={{ width: '100vw', height: '100vh' }}
+          >
+            <PerformanceMonitor
+              onChange={({ factor }) => setDPR(homeInView ? Math.floor(2 + 2 * factor) : 0.5)}
+            />
             <M1 />
             <color attach='background' args={['black']} />
             <ambientLight intensity={0.5} />
@@ -61,49 +63,6 @@ export default function Page() {
           <Experience />
         </div>
       </div>
-    </div>
-  )
-
-  return (
-    <div className={jbMono.className + ' w-screen h-screen'}>
-      <Canvas shadows dpr={[5, 5]} camera={{ position: [0, 0, 20], fov: 30 }}>
-        <ScrollControls pages={8} damping={0.1}>
-          <Scroll html>
-            <div className='absolute flex h-screen w-screen flex-col items-center justify-center '>
-              <div className={jbMono.className + ' text-white'}>
-                <TypingText delay={1000} finalText={"Addy Ireland"} speed={100} />
-              </div>
-              <ScrollText>
-                <ScrollTextElement>19 YEARS OLD</ScrollTextElement>
-                <ScrollTextElement>PENN STATE UNIVERSITY</ScrollTextElement>
-                <ScrollTextElement>COMPUTER SCIENCE</ScrollTextElement>
-                <ScrollTextElement>BROTHER OF ALPHA CHI RHO</ScrollTextElement>
-              </ScrollText>
-            </div>
-            <Projects />
-          </Scroll>
-          <M1 />
-          <color attach='background' args={['black']} />
-          <ambientLight intensity={0.5} />
-          <Environment resolution={64} files='/env.hdr' />
-          <fog attach='fog' args={['black', 20, 40]} />
-          {/*<gridHelper args={[50, 50, 'grey', 'grey']} position={[0, -2.95, 0.5]} />*/}
-          <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -3, 0]}>
-            <planeGeometry args={[50, 50]} />
-            <MeshReflectorMaterial
-              blur={[100, 100]}
-              mixBlur={0.8}
-              mixStrength={10}
-              mirror={0.8}
-              resolution={512}
-              depthScale={1}
-              minDepthThreshold={0.2}
-              maxDepthThreshold={5}
-              color={'#333'}
-            />
-          </mesh>
-        </ScrollControls>
-      </Canvas>
     </div>
   )
 }

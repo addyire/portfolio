@@ -32,7 +32,7 @@ const Layout = ({ children }) => {
         overflow: 'auto',
         touchAction: 'auto',
         overscrollBehavior: 'none',
-        scrollBehavior: 'smooth'
+        scrollBehavior: 'smooth',
       }}
     >
       <scrollContext.Provider value={scroll}>

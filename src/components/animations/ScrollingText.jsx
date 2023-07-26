@@ -1,13 +1,13 @@
 
 export const ScrollTextElement = ({ children }) => (
   <span className={'w-full text-center text-gray-500'}>
-    <span className=''>{children}</span>
+    <span className='hover:text-white'>{children}</span>
     <span className="mx-4">{"//"}</span>
   </span>
 )
 
 export const ScrollText = ({ children }) => (
-  <div className='relative flex w-3/5 overflow-x-hidden mt-8'>
+  <div className='relative flex w-4/5 md:w-3/5 overflow-x-hidden mt-8'>
     <div className='animate-marquee whitespace-nowrap '>{children}</div>
 
     <div className='absolute top-0 animate-marquee2 whitespace-nowrap '>{children}</div>

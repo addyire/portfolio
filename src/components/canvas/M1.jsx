@@ -1,10 +1,12 @@
 'use client'
 
-import { ScrollControls, useGLTF, useTexture } from '@react-three/drei'
+import { Html, ScrollControls, useGLTF, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useContext, useRef } from 'react'
 import * as THREE from 'three'
 import { scrollContext } from '../dom/Layout'
+import { ScrollText, ScrollTextElement } from '../animations/ScrollingText'
+import TypingText from '../animations/TypingText'
 
 const { damp } = THREE.MathUtils
 
@@ -12,29 +14,54 @@ export const M1 = ({ ...props }) => {
   const { nodes, materials } = useGLTF('/14mbp.glb')
   const backgroundTexture = useTexture('/bgreal.jpg')
 
-  const { aspect } = useThree((state) => state.viewport)
+  // three stuff
+  const { aspect, height } = useThree((state) => state.viewport)
   const camera = useThree((state) => state.camera)
+
+  // refs
   const mbp = useRef()
   const mbpScreen = useRef()
   const spotLight = useRef()
   const displayRef = useRef()
+  const textRef = useRef()
   const myscroll = useContext(scrollContext)
 
   const scale = Math.min(0.325, 0.2 * aspect)
 
-  useFrame((_, delta) => {
-    const rawScroll = Math.min(1, myscroll.pageProgress ** 1.2)
-    const dampedOpen = damp(mbpScreen.current.rotation.x, (rawScroll * -Math.PI) / 2, 10, delta)
-    const dampedZoomIn = damp(camera.position.z, 20 - 5 * rawScroll, 8, delta)
+  const aspectModifier = Math.min(0, aspect - 1.4) * 2
 
+  useFrame((_, delta) => {
+    const rawScroll = Math.min(1, (myscroll.pageProgress ** 1.8) * 2)
+
+    const dampedTextY = damp(textRef.current.position.y, 0 + height * rawScroll, 10, delta)
+    const dampedOpen = damp(mbpScreen.current.rotation.x, (rawScroll * -Math.PI) / 2, 10, delta)
+    const dampedZoomIn = damp(camera.position.z, 20 - 5 * rawScroll + aspectModifier, 8, delta)
+    const dampedCameraY = damp(camera.position.y, 0 + aspectModifier * rawScroll, 10, delta)
+
+    textRef.current.position.y = dampedTextY
     mbpScreen.current.rotation.x = dampedOpen
     camera.position.setZ(dampedZoomIn)
+    camera.position.setY(dampedCameraY)
   })
 
   return (
     <>
+      <group ref={textRef} position={[0, 0, 0]}>
+        <Html
+          center
+          className="flex flex-col items-center justify-center w-screen text-center">
+          <TypingText delay={1000} finalText={'Addy Ireland'} speed={100} />
+          <ScrollText>
+            <ScrollTextElement>19 years old</ScrollTextElement>
+            <ScrollTextElement>penn state university</ScrollTextElement>
+            <ScrollTextElement>computer science</ScrollTextElement>
+            <ScrollTextElement>brother of alpha chi rho</ScrollTextElement>
+          </ScrollText>
+        </Html>
+      </group>
+
       <spotLight ref={spotLight} penumbra={1} position={[0, 10, 0]} intensity={0} />
-      <group {...props} ref={mbp} position={[0, -3, 0]} scale={scale} dispose={null}>
+      <group {...props} ref={mbp} position={[0, -2.85, 0]} scale={scale} dispose={null}>
         <group ref={mbpScreen} position={[0, 0.7, -10.8]}>
           <group rotation={[0, 0, 0]} position={[0, -0.7, 10.8]}>
             <mesh geometry={nodes.apple_apple_logo_M_0.geometry} material={materials.PaletteMaterial001} />
@@ -43,7 +70,6 @@ export const M1 = ({ ...props }) => {
             </group>
             <group position={[0, 1.23, -11.52]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 0.01]}>
               <mesh geometry={nodes.cam_camera_M_0.geometry} material={materials.camera_M} />
-              <mesh geometry={nodes.cam_green_light_M_0.geometry} material={materials.PaletteMaterial002} />
             </group>
             <mesh geometry={nodes.rubber1_rubber_0.geometry} material={materials.PaletteMaterial001} />
             <mesh ref={displayRef} geometry={nodes.screen_screen_M_0.geometry}>
