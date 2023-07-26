@@ -17,10 +17,10 @@ export default function RootLayout({ children }) {
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className={jbMono.className}>
+      <body className={jbMono.className + ' bg-black text-white'}>
         {/* To avoid FOUT with styled-components wrap Layout with StyledComponentsRegistry https://beta.nextjs.org/docs/styling/css-in-js#styled-components */}
         <Layout>{children}</Layout>
       </body>
-    </html>
+    </html >
   )
 }

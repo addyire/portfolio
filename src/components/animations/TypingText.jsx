@@ -13,7 +13,7 @@ const TypingText = ({ finalText, speed, delay }) => {
 
   const shouldBlink = text.length === 0 || text.length === finalText.length
 
-  return <div className="font-bold ml-5 text-6xl">
+  return <div className="font-bold ml-5 text-4xl md:text-6xl">
     {text}
     <span className={`visible -ml-1 ${shouldBlink ? 'animate-blink' : ''}`}>|</span>
   </div>

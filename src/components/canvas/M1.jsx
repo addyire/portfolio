@@ -1,51 +1,41 @@
 'use client'
 
-import {
-  MeshReflectorMaterial,
-  PerspectiveCamera,
-  ScrollControls,
-  useGLTF,
-  useScroll,
-  useTexture,
-} from '@react-three/drei'
+import { ScrollControls, useGLTF, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { forwardRef, useRef } from 'react'
+import { useContext, useRef } from 'react'
 import * as THREE from 'three'
-import { lerp } from 'three/src/math/MathUtils'
+import { scrollContext } from '../dom/Layout'
 
-const { damp, degToRad } = THREE.MathUtils
+const { damp } = THREE.MathUtils
 
-const STARTING_SCALE = 0.3
-
-export const M1 = ({ page, ...props }) => {
+export const M1 = ({ ...props }) => {
   const { nodes, materials } = useGLTF('/14mbp.glb')
   const backgroundTexture = useTexture('/bgreal.jpg')
 
-  const scroll = useScroll()
-  const { width, height } = useThree((state) => state.viewport)
+  const { aspect } = useThree((state) => state.viewport)
   const camera = useThree((state) => state.camera)
   const mbp = useRef()
   const mbpScreen = useRef()
   const spotLight = useRef()
   const displayRef = useRef()
+  const myscroll = useContext(scrollContext)
 
-  useFrame((state, delta) => {
-    // mbpScreen.current.rotation.x = 0 - (Math.PI / 2) * openRange
-    mbpScreen.current.rotation.x = lerp(mbpScreen.current.rotation.x, page == 1 ? -Math.PI / 2 : 0, 0.05)
-    // camera.position.setZ(20 - 16 * zoomInRange ** 2 - 4 * openZoomRange)
-    // displayRef.current.material.roughness = zoomInRange * 5
-    // displayRef.current.material.metalness = 1 - zoomInRange
-    // displayRef.current.material.emissiveIntensity = 1 - zoomInRange
-    // camera.position.setY(zoomInRange == 1 ? 50 : 0) // reduces gpu usage for rest of page
-    // console.log(mbp.current.visible)
+  const scale = Math.min(0.325, 0.2 * aspect)
+
+  useFrame((_, delta) => {
+    const rawScroll = Math.min(1, myscroll.pageProgress * 1.5)
+    const dampedOpen = damp(mbpScreen.current.rotation.x, (rawScroll * -Math.PI) / 2, 10, delta)
+    const dampedZoomIn = damp(camera.position.z, 20 - 5 * rawScroll, 8, delta)
+
+    mbpScreen.current.rotation.x = dampedOpen
+    camera.position.setZ(dampedZoomIn)
   })
-  console.log(mbp.current)
 
   return (
     <>
       <spotLight ref={spotLight} penumbra={1} position={[0, 10, 0]} intensity={0} />
       {/* <pointLight position={[0, 10, -5]} intensity={0.1} /> */}
-      <group {...props} ref={mbp} position={[0, -3, 0]} scale={0.3} dispose={null}>
+      <group {...props} ref={mbp} position={[0, -3, 0]} scale={scale} dispose={null}>
         <group ref={mbpScreen} position={[0, 0.7, -10.8]}>
           <group rotation={[0, 0, 0]} position={[0, -0.7, 10.8]}>
             <mesh geometry={nodes.apple_apple_logo_M_0.geometry} material={materials.PaletteMaterial001} />
@@ -62,7 +52,7 @@ export const M1 = ({ page, ...props }) => {
                 emissive={'#fff'}
                 emissiveMap={backgroundTexture}
                 emissiveIntensity={1}
-                color="#000"
+                color='#000'
                 roughness={0}
                 metalness={1}
                 envMapIntensity={0}
@@ -100,60 +90,6 @@ export const M1 = ({ page, ...props }) => {
       </group>
     </>
   )
-
-  // return (
-  //   <>
-  //     <spotLight ref={spotLight} position={[0, 5, 10]} intensity={1} />
-  //     <group {...props} ref={mbp} position={[0, -2, 0]} dispose={null}>
-  //       <group ref={mbpScreen} position={[0, -0.43, -11.35]} rotation={[0, 0, 0]}>
-  //         <mesh geometry={nodes.back_1.geometry} material={materials.blackmatte} />
-  //         <mesh receiveShadow castShadow geometry={nodes.back_2.geometry} material={materials.aluminium} />
-  //       </group>
-  //       <mesh
-  //         geometry={nodes.body_1.geometry}
-  //         material={materials.aluminium}
-  //         material-color='#aaaaaf'
-  //         material-envMapIntensity={0.2}
-  //       />
-  //       <mesh geometry={nodes.body_2.geometry} material={materials.blackmatte} />
-  //     </group>
-  //   </>
-  // )
-  // return (
-  //   <>
-  //     <spotLight position={[0, 5, 10]} intensity={1} />
-  //     <group {...props} ref={mbp} position={[0, -2, 0]} dispose={null}>
-  //       <group ref={mbpScreen} position={[0, -0.35, -11.4]}>
-  //         <group position={[0, -3.5, 10.8]} rotation={[degToRad(20), 0, 0]}>
-  //           {/* Screen */}
-  //           <mesh geometry={nodes.abgVijaHVNRUvcc.geometry}>
-  //             <meshLambertMaterial side={THREE.DoubleSide} map={backgroundTexture} toneMapped={false} />
-  //           </mesh>
-  //           {/* <mesh geometry={mNodes.matte.geometry}>
-  //             <meshLambertMaterial map={backgroundTexture} toneMapped={false} />
-  //           </mesh> */}
-  //           <mesh receiveShadow geometry={nodes.CEvArJuvvmtQsgk.geometry} material={materials.PaletteMaterial002} />
-  //           <mesh receiveShadow geometry={nodes.zlRXoydEgBQgFUa.geometry} material={materials.zqeFZcIteZtOShc} />
-  //           <mesh receiveShadow geometry={nodes.ehiyYGFzDbgxhiD.geometry} material={materials.LJSCtLIrHNHZnIH} />
-  //         </group>
-  //       </group>
-  //       <group>
-  //         <mesh geometry={nodes.eAcvqfZlEdoxHsj.geometry} material={materials.IlNnjEDxsExlBOr} />
-  //         <mesh geometry={nodes.NgmQYtxXWDmCavo.geometry} material={materials.SKOFticEGTqECbB} />
-  //         <mesh geometry={nodes.KCEhahuknsxQOxv.geometry} material={materials.HpEeGHRuOqfcIZU} />
-  //         <mesh geometry={nodes.QHqPxKdexBoFnAK.geometry} material={materials.PaletteMaterial005} />
-  //         <mesh geometry={nodes.YJMoQnvBNpTrgeH.geometry} material={materials.PaletteMaterial002} />
-  //         <mesh geometry={nodes.UxiDBlCRfXiMBzT.geometry} material={materials.zWLcvvnJhbcTEtJ} />
-  //         <mesh geometry={nodes.xlRLalLTesirCGW.geometry} material={materials.hPcehRUjcLAosED} />
-  //         <mesh geometry={nodes.wXiLpiodZWNDroe.geometry} material={materials.PaletteMaterial004} />
-  //         <mesh geometry={nodes.NWErafhynAfYQEz.geometry} material={materials.pZbDFXVUkfRwjmQ} />
-  //         <mesh geometry={nodes.QMBrsnrwfcVKELm.geometry} material={materials.VqwNZwmDotIMflD} />
-  //         <mesh geometry={nodes.jvyJQHpRnZNPEYh.geometry} material={materials.LJSCtLIrHNHZnIH} />
-  //         <mesh geometry={nodes.VqfccLWHjnpnmIO.geometry} material={materials.BMKLbAPYqPmfArt} />
-  //       </group>
-  //     </group>
-  //   </>
-  // )
 }
 
 export const MBPScene = () => {
