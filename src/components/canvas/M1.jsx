@@ -34,7 +34,6 @@ export const M1 = ({ ...props }) => {
   return (
     <>
       <spotLight ref={spotLight} penumbra={1} position={[0, 10, 0]} intensity={0} />
-      {/* <pointLight position={[0, 10, -5]} intensity={0.1} /> */}
       <group {...props} ref={mbp} position={[0, -3, 0]} scale={scale} dispose={null}>
         <group ref={mbpScreen} position={[0, 0.7, -10.8]}>
           <group rotation={[0, 0, 0]} position={[0, -0.7, 10.8]}>
