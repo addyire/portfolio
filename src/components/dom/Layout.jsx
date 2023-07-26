@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
       scroll.pageProgress = ref.current.scrollTop / window.innerHeight
 
     ref.current.addEventListener('scroll', onScroll)
-    return () => ref.current.removeEventListener('scroll', onScroll)
+    return () => ref.current?.removeEventListener('scroll', onScroll)
   }, [scroll])
 
   return (

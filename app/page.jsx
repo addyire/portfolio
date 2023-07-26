@@ -7,9 +7,6 @@ import { ScrollText, ScrollTextElement } from '@/components/animations/Scrolling
 import { JetBrains_Mono } from 'next/font/google'
 import TypingText from '@/components/animations/TypingText'
 import Projects from '@/components/Projects'
-import { useInView } from 'react-intersection-observer'
-import { useEffect, useRef } from 'react'
-import Header from '@/components/Header'
 import Experience from '@/components/Experience'
 import Navbar from '@/components/layout/Navbar'
 import AboutMe from '@/components/AboutMe'
@@ -19,12 +16,10 @@ const jbMono = JetBrains_Mono({ subsets: ['latin'] })
 const M1 = dynamic(() => import('@/components/canvas/M1').then((mod) => mod.M1), { ssr: false })
 
 export default function Page() {
-  const progress = useProgress()
-
   return (
     <div className="w-screen" >
       <div className="w-screen relative" style={{ height: '200vh' }}>
-        <div className="absolute w-screen h-screen z-10 text-white flex flex-col items-center justify-center pb-16">
+        <div className="absolute w-screen h-screen z-50 text-white flex flex-col items-center justify-center pb-16">
           <TypingText delay={1000} finalText={'Addy Ireland'} speed={100} />
           <ScrollText>
             <ScrollTextElement>19 years old</ScrollTextElement>
@@ -33,7 +28,7 @@ export default function Page() {
             <ScrollTextElement>brother of alpha chi rho</ScrollTextElement>
           </ScrollText>
         </div>
-        <div className="sticky h-screen w-screen top-0">
+        <div className="sticky h-screen w-screen z-40 top-0">
           <Canvas shadows dpr={[2, 2]} camera={{ position: [0, 0, 20], fov: 30 }} style={{ width: '100vw', height: '100vh' }}>
             <M1 />
             <color attach='background' args={['black']} />
