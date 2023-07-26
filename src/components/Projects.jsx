@@ -1,7 +1,3 @@
-import { useScroll } from "@react-three/drei"
-import Image from "next/image"
-import Definition from "./Definition"
-import { useInView } from "react-intersection-observer"
 import Header from "./Header"
 import ProjectCard from "./ProjectCard"
 import Button from "./Button"
@@ -9,7 +5,7 @@ import { IoIosGlobe, IoLogoGithub } from "react-icons/io"
 
 const Projects = () => {
 
-  return <div className='space-y-8 '>
+  return <div className='space-y-8'>
     <Header>projects</Header>
     <div className="mt-8 grid grid-cols-3 md:px-8 gap-8 md:gap-24 w-full py-4 md:py-12">
       <ProjectCard image={'/projects/dripped.png'} preview={'/projects/dripped-preview-2.png'} title={'Dripped'} description={'Dripped is a social media platform for sharing, saving, and searching for outfit inspiration. '} tech={'React Native, Express, SQL'}>

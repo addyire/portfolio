@@ -23,7 +23,7 @@ export const M1 = ({ ...props }) => {
   const scale = Math.min(0.325, 0.2 * aspect)
 
   useFrame((_, delta) => {
-    const rawScroll = Math.min(1, myscroll.pageProgress * 1.5)
+    const rawScroll = Math.min(1, myscroll.pageProgress ** 1.2)
     const dampedOpen = damp(mbpScreen.current.rotation.x, (rawScroll * -Math.PI) / 2, 10, delta)
     const dampedZoomIn = damp(camera.position.z, 20 - 5 * rawScroll, 8, delta)
 

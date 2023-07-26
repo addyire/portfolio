@@ -1,20 +1,40 @@
+'use client'
+
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { IoIosMenu, IoLogoGithub, IoLogoLinkedin } from "react-icons/io"
 import FadeIn from "../animations/FadeIn"
 import AnimatedHeader from "../animations/AnimatedHeader"
+import { useRouter } from "next/navigation"
+import { scrollContext } from "../dom/Layout"
 
 const NavItemText = ({ children, bright }) =>
-  <a className={bright ? 'text-white' : 'text-gray-400' + ' cursor-pointer transition-all'}>{children}</a>
+  <a key={children} className={bright ? 'text-white' : 'text-gray-400' + ' cursor-pointer duration-200 transition-all'}>{children}</a>
 
-const Navbar = () => {
-  const path = usePathname()
+const Navbar = ({ viewing }) => {
+  const router = useRouter()
   const [expanded, setExpanded] = useState()
   const [hoveredPage, setHoveredPage] = useState()
 
+  const { scroll } = useContext(scrollContext)
+
   const homeRef = useRef()
+  const aboutMeRef = useRef()
   const projectsRef = useRef()
-  const contactRef = useRef()
+  const experienceRef = useRef()
+
+  const mobileNavTo = (section) => {
+    setExpanded(false)
+
+    setTimeout(() => navTo(section), 500)
+  }
+
+  const navTo = (section) => {
+    const el = document.getElementById(section)
+    if (!el) return
+
+    scroll(el.offsetTop - 64)
+  }
 
   return <>
     <div
@@ -46,10 +66,11 @@ const Navbar = () => {
           />
         </div>
       </div>
-      <div className="px-4 py-0 space-y-2">
-        <AnimatedHeader text={'Home'} />
-        <AnimatedHeader text={'Projects'} />
-        <AnimatedHeader text={'Contact'} />
+      <div className="p-4 space-y-4">
+        <AnimatedHeader onClick={() => mobileNavTo('home')} text={'Home'} />
+        <AnimatedHeader onClick={() => mobileNavTo('aboutme')} text={'About Me'} />
+        <AnimatedHeader onClick={() => mobileNavTo('projects')} text={'Projects'} />
+        <AnimatedHeader onClick={() => mobileNavTo('experience')} text={'Experience'} />
       </div>
     </div>
     <div className="w-full hidden md:flex sticky justify-center items-center p-4 bg-black bg-opacity-50 backdrop-blur text-white top-0 z-50">
@@ -60,22 +81,33 @@ const Navbar = () => {
           ref={homeRef}
           id="home"
           className="text-gray-400 py-0.5 px-3 cursor-pointer"
+          onClick={() => router.push('/')}
           style={{ zIndex: 52 }}>
-          <NavItemText bright={path === '/' || hoveredPage?.innerText === 'Home'}>Home</NavItemText>
+          <NavItemText bright={viewing === 'home' || hoveredPage?.innerText === 'Home'}>Home</NavItemText>
+        </div>
+        <div
+          onMouseEnter={() => setHoveredPage(aboutMeRef.current)}
+          ref={aboutMeRef}
+          className="text-gray-400 py-0.5 px-3 cursor-pointer"
+          onClick={() => navTo('aboutme')}
+          style={{ zIndex: 52 }}>
+          <NavItemText bright={viewing === 'aboutme' || hoveredPage?.innerText === 'About Me'}>About Me</NavItemText>
         </div>
         <div
           onMouseEnter={() => setHoveredPage(projectsRef.current)}
           ref={projectsRef}
           className="text-gray-400 py-0.5 px-3 cursor-pointer"
+          onClick={() => navTo('projects')}
           style={{ zIndex: 52 }}>
-          <NavItemText bright={path === '/projects' || hoveredPage?.innerText === 'Projects'}>Projects</NavItemText>
+          <NavItemText bright={viewing === 'projects' || hoveredPage?.innerText === 'Projects'}>Projects</NavItemText>
         </div>
         <div
-          onMouseEnter={() => setHoveredPage(contactRef.current)}
-          ref={contactRef}
+          onMouseEnter={() => setHoveredPage(experienceRef.current)}
+          ref={experienceRef}
           className="text-gray-400 py-0.5 px-3 cursor-pointer"
+          onClick={() => navTo('experience')}
           style={{ zIndex: 52 }}>
-          <NavItemText bright={path === '/contact' || hoveredPage?.innerText === 'Contact'}>Contact</NavItemText>
+          <NavItemText bright={viewing === 'experience' || hoveredPage?.innerText === 'Experience'}>Experience</NavItemText>
         </div>
         <div
           className="absolute rounded-md"

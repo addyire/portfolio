@@ -1,10 +1,6 @@
 
 export const ScrollTextElement = ({ children }) => (
-  <span
-    className={
-      'w-full text-center text-gray-500 '
-    }
-  >
+  <span className={'w-full text-center text-gray-500'}>
     <span className=''>{children}</span>
     <span className="mx-4">{"//"}</span>
   </span>

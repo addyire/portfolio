@@ -8,10 +8,12 @@ export const scrollContext = createContext()
 
 const Layout = ({ children }) => {
   const ref = useRef()
-  const scroll = useMemo(() => ({ pageProgress: 0 }), [])
+  const scroll = useMemo(() => ({ pageProgress: 0, scroll: () => console.log('no scroller') }), [])
 
   useEffect(() => {
     if (!ref || !ref.current || !scroll) return
+
+    scroll.scroll = (top) => ref.current?.scroll({ top, behavior: 'smooth' })
 
     const onScroll = () =>
       scroll.pageProgress = ref.current.scrollTop / window.innerHeight

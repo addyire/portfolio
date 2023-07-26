@@ -10,15 +10,25 @@ import Projects from '@/components/Projects'
 import Experience from '@/components/Experience'
 import Navbar from '@/components/layout/Navbar'
 import AboutMe from '@/components/AboutMe'
+import { useInView } from 'react-intersection-observer'
+import { useState } from 'react'
 
 const jbMono = JetBrains_Mono({ subsets: ['latin'] })
 
 const M1 = dynamic(() => import('@/components/canvas/M1').then((mod) => mod.M1), { ssr: false })
 
 export default function Page() {
+  const [viewing, setViewing] = useState('home')
+
+  const [homeRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('home') })
+  const [aboutMeRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('aboutme') })
+  const [projectsRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('projects') })
+  const [experienceRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('experience') })
+  const [contactRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('contact') })
+
   return (
     <div className="w-screen" >
-      <div className="w-screen relative" style={{ height: '200vh' }}>
+      <div className="w-screen relative" style={{ height: '200vh' }} ref={homeRef} >
         <div className="absolute w-screen h-screen z-50 text-white flex flex-col items-center justify-center pb-16">
           <TypingText delay={1000} finalText={'Addy Ireland'} speed={100} />
           <ScrollText>
@@ -39,11 +49,17 @@ export default function Page() {
         </div>
       </div>
       <div className="h-16" />
-      <Navbar />
+      <Navbar viewing={viewing} />
       <div className="max-w-screen-xl p-4 w-full mx-auto space-y-16">
-        <AboutMe />
-        <Projects />
-        <Experience />
+        <div id="aboutme" ref={aboutMeRef}>
+          <AboutMe />
+        </div>
+        <div id="projects" ref={projectsRef}>
+          <Projects />
+        </div>
+        <div id="experience" ref={experienceRef}>
+          <Experience />
+        </div>
       </div>
     </div>
   )
