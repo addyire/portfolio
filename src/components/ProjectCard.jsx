@@ -8,7 +8,7 @@ const ProjectCard = ({ title, image, tech, description, children, preview, rever
 
   return (
     <div
-      className={`bg-gradient-to-r from-blue-500 to-red-500 col-span-3 md:col-span-2 p-0.5 mx-auto w-full`}
+      className={`bg-gradient-to-r shadow-[0_0_20px_5px_rgba(255,255,255,0.2)]  from-blue-500 to-red-500 col-span-6 md:col-span-5 xl:col-span-4 p-0.5 mx-auto w-full`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -33,7 +33,7 @@ const ProjectCard = ({ title, image, tech, description, children, preview, rever
           {children}
         </div>
         <div className="relative w-full col-span-3 md:col-span-1 md:h-full flex items-center justify-center">
-          <Image src={preview} width={2048} height={1024} className={`h-64 md:h-auto object-contain rounded-md md:scale-[200%] shadow md:absolute ${reverse ? 'right-1/2 ' : 'left-1/2'}`} />
+          <Image src={preview} width={2048} height={1024} className={`h-64 md:h-auto object-contain rounded-md md:scale-[200%] lg:scale-[175%] xl:scale-[200%] shadow md:absolute ${reverse ? 'right-1/2 ' : 'left-1/2'}`} />
         </div>
       </div>
     </div>

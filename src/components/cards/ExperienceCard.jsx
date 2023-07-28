@@ -25,7 +25,7 @@ const ExperienceCard = ({ side = "left", inView, logo, title, subtitle, text }) 
         <div className="w-full h-0.5 bg-gray-500 transition-all delay-700" style={{ maxWidth: inView ? '100%' : '0%' }} />
       </div>
     </div>
-    <div className={`${inView ? 'scale-100' : 'scale-0'} delay-500 transition-all duration-200 absolute top-1/2 ${left ? 'right-[100%] lg:right-0' : 'left-0'} h-4 w-4 z-10 border-2 border-white rounded-full bg-black -translate-y-1/2 ${left ? 'translate-x-1/2' : '-translate-x-1/2'}`}></div>
+    <div className={`${inView ? 'scale-100' : 'scale-0'} delay-500 transition-transform duration-200 absolute top-1/2 ${left ? 'right-[100%] lg:right-0' : 'left-0'} h-4 w-4 z-10 border-2 border-white rounded-full bg-black -translate-y-1/2 ${left ? 'translate-x-1/2' : '-translate-x-1/2'}`}></div>
   </div >
 }
 

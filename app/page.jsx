@@ -50,7 +50,6 @@ export default function Page() {
           </Canvas>
         </div>
       </div>
-      <div className="h-16" />
       <Navbar viewing={viewing} />
       <div className="max-w-screen-xl p-4 w-full mx-auto space-y-16">
         <div id="aboutme" ref={aboutMeRef}>
