@@ -71,7 +71,7 @@ const Navbar = ({ viewing }) => {
           onMouseEnter={() => setHoveredPage(homeRef.current)}
           ref={homeRef}
           id="home"
-          className="text-gray-400 py-0.5 px-3 md:cursor-pointer pointer-events-none md:pointer-events-auto"
+          className="text-gray-400 py-0.5 px-3 md:cursor-pointer pointer-events-none md:pointer-events-auto whitespace-nowrap"
           onClick={() => router.push('/')}
           style={{ zIndex: 52 }}>
           <NavItemText
@@ -83,7 +83,7 @@ const Navbar = ({ viewing }) => {
         <div
           onMouseEnter={() => setHoveredPage(aboutMeRef.current)}
           ref={aboutMeRef}
-          className="text-gray-400 py-0.5 px-3 md:cursor-pointer pointer-events-none md:pointer-events-auto"
+          className="text-gray-400 py-0.5 px-3 md:cursor-pointer pointer-events-none md:pointer-events-auto whitespace-nowrap"
           onClick={() => navTo('aboutme')}
           style={{ zIndex: 52 }}>
           <NavItemText
@@ -95,7 +95,7 @@ const Navbar = ({ viewing }) => {
         <div
           onMouseEnter={() => setHoveredPage(projectsRef.current)}
           ref={projectsRef}
-          className="text-gray-400 py-0.5 px-3 md:cursor-pointer pointer-events-none md:pointer-events-auto"
+          className="text-gray-400 py-0.5 px-3 md:cursor-pointer pointer-events-none md:pointer-events-auto whitespace-nowrap"
           onClick={() => navTo('projects')}
           style={{ zIndex: 52 }}>
           <NavItemText
@@ -107,7 +107,7 @@ const Navbar = ({ viewing }) => {
         <div
           onMouseEnter={() => setHoveredPage(experienceRef.current)}
           ref={experienceRef}
-          className="text-gray-400 py-0.5 px-3 md:cursor-pointer pointer-events-none md:pointer-events-auto"
+          className="text-gray-400 py-0.5 px-3 md:cursor-pointer pointer-events-none md:pointer-events-auto whitespace-nowrap"
           onClick={() => navTo('experience')}
           style={{ zIndex: 52 }}>
           <NavItemText
