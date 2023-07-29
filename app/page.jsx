@@ -1,14 +1,15 @@
 'use client'
 
-import { Environment, Lightformer, PerformanceMonitor, Preload, Stats } from '@react-three/drei'
+import { Environment, Lightformer, PerformanceMonitor, Preload, Stats, useGLTF } from '@react-three/drei'
+import { Suspense, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
+import { useInView } from 'react-intersection-observer'
 import dynamic from 'next/dynamic'
+
 import Projects from '@/components/Projects'
 import Experience from '@/components/Experience'
 import Navbar from '@/components/layout/Navbar'
 import AboutMe from '@/components/AboutMe'
-import { useInView } from 'react-intersection-observer'
-import { Suspense, useEffect, useState } from 'react'
 
 const ThreeHeader = dynamic(() => import('@/components/canvas/ThreeHeader').then(mod => mod.default), { ssr: false })
 const M1 = dynamic(() => import('@/components/canvas/M1').then((mod) => mod.M1), { ssr: false })
@@ -76,3 +77,5 @@ export default function Page() {
     </div>
   )
 }
+
+useGLTF.preload('/14mbp.glb')

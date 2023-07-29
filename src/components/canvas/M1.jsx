@@ -1,8 +1,8 @@
 'use client'
 
-import { useGLTF, useTexture, useVideoTexture } from '@react-three/drei'
+import { useGLTF, useTexture } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Suspense, forwardRef, useContext, useEffect, useRef } from 'react'
+import { useContext, useRef } from 'react'
 import * as THREE from 'three'
 import { ScrollContext } from '@/helpers/context'
 import dynamic from 'next/dynamic'
