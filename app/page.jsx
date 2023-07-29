@@ -1,6 +1,6 @@
 'use client'
 
-import { Environment, Lightformer, PerformanceMonitor, Preload, Stats, useGLTF } from '@react-three/drei'
+import { Environment, Lightformer, PerformanceMonitor, Preload, useGLTF } from '@react-three/drei'
 import { Suspense, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useInView } from 'react-intersection-observer'
@@ -46,7 +46,6 @@ export default function Page() {
             />
             <Preload all />
             <ThreeHeader />
-            <Stats showPanel={0} />
             <Suspense fallback={null}>
               <M1 />
             </Suspense>
