@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { ScrollContext } from "@/helpers/context"
 
 const NavItemText = ({ children, bright }) =>
-  <a key={children} className={bright ? 'text-white' : 'text-gray-400' + ' cursor-pointer duration-200 transition-all'}>{children}</a>
+  <span key={children} className={bright ? 'text-white' : 'text-gray-400' + ' cursor-pointer duration-200 transition-all'}>{children}</span>
 
 const Navbar = ({ viewing }) => {
   const router = useRouter()
