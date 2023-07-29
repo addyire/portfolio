@@ -1,6 +1,6 @@
 'use client'
 
-import { Environment, Lightformer, PerformanceMonitor } from '@react-three/drei'
+import { Environment, Lightformer, PerformanceMonitor, Preload, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import dynamic from 'next/dynamic'
 import Projects from '@/components/Projects'
@@ -43,7 +43,9 @@ export default function Page() {
               onChange={({ factor }) =>
                 setDPR(homeInView ? Math.floor(2 + 2 * factor) : 0.5)}
             />
+            <Preload all />
             <ThreeHeader />
+            <Stats showPanel={0} />
             <Suspense fallback={null}>
               <M1 />
             </Suspense>

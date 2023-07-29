@@ -5,22 +5,17 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { Suspense, forwardRef, useContext, useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { ScrollContext } from '@/helpers/context'
+import dynamic from 'next/dynamic'
 
 const { damp } = THREE.MathUtils
 
-const VideoTextureNoRef = (_, ref) => {
-  const texture = useVideoTexture('/laptop-video.webm', {
-    muted: true,
-    loop: true,
-    unsuspend: 'canplay',
-    start: true,
-    playsInline: true
-  })
-
-  return <meshBasicMaterial map={texture} ref={ref} toneMapped={false} />
-}
-
-const VideoTexture = forwardRef(VideoTextureNoRef)
+const VideoTexture = dynamic(() =>
+  import('@/components/canvas/VideoTexture'),
+  {
+    loading: () => <ImageTexture />,
+    ssr: false,
+  }
+)
 
 const ImageTexture = () => {
   const texture = useTexture('/laptop-image.jpg')
@@ -43,7 +38,6 @@ export const M1 = ({ ...props }) => {
   // refs
   const mbp = useRef()
   const mbpScreen = useRef()
-  const displayRef = useRef()
   const myscroll = useContext(ScrollContext)
 
   // scaling
@@ -57,12 +51,6 @@ export const M1 = ({ ...props }) => {
     const dampedOpen = damp(mbpScreen.current.rotation.x, (rawScroll * -Math.PI) / 2, 10, delta)
     const dampedZoomIn = damp(camera.position.z, 20 - 5 * rawScroll + aspectModifier, 8, delta)
     const dampedCameraY = damp(camera.position.y, 0 + aspectModifier * rawScroll, 10, delta)
-
-    // hide display when not visible
-    if (!!displayRef.current && (dampedOpen > -.05 || myscroll.pageProgress > 2.25))
-      displayRef.current.visible = false
-    else if (!!displayRef.current && !displayRef.current.visible)
-      displayRef.current.visible = true
 
     // apply damping
     mbpScreen.current.rotation.x = dampedOpen
@@ -83,9 +71,7 @@ export const M1 = ({ ...props }) => {
           </group>
           <mesh geometry={nodes.rubber1_rubber_0.geometry} material={materials.PaletteMaterial001} />
           <mesh geometry={nodes.screen_screen_M_0.geometry} >
-            <Suspense fallback={<ImageTexture />}>
-              <VideoTexture ref={displayRef} />
-            </Suspense>
+            <VideoTexture />
           </mesh>
           <mesh geometry={nodes.cap_screen_frame_0.geometry} material={materials.PaletteMaterial001} />
           <mesh geometry={nodes.cap_body_M_0.geometry} material={materials.PaletteMaterial001} />
