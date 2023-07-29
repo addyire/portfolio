@@ -12,7 +12,7 @@ import { ScrollContext } from '@/helpers/context'
 const { damp } = THREE.MathUtils
 
 const VideoTexture = forwardRef((_, ref) => {
-  const texture = useVideoTexture('/laptop-video-low.webm', {
+  const texture = useVideoTexture('/laptop-video.webm', {
     muted: true,
     loop: true,
     unsuspend: 'canplay',
