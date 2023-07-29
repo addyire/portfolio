@@ -33,6 +33,7 @@ export default function RootLayout({ children }) {
       */}
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="preconnect" href="https://www.gstatic.com" />
       </head>
       <body className={jbMono.className + ' bg-black text-white'}>
         {/* To avoid FOUT with styled-components wrap Layout with StyledComponentsRegistry https://beta.nextjs.org/docs/styling/css-in-js#styled-components */}

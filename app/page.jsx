@@ -1,6 +1,6 @@
 'use client'
 
-import { Environment, PerformanceMonitor } from '@react-three/drei'
+import { Environment, Lightformer, PerformanceMonitor } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import dynamic from 'next/dynamic'
 import Projects from '@/components/Projects'
@@ -8,8 +8,9 @@ import Experience from '@/components/Experience'
 import Navbar from '@/components/layout/Navbar'
 import AboutMe from '@/components/AboutMe'
 import { useInView } from 'react-intersection-observer'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
+const ThreeHeader = dynamic(() => import('@/components/canvas/ThreeHeader').then(mod => mod.default), { ssr: false })
 const M1 = dynamic(() => import('@/components/canvas/M1').then((mod) => mod.M1), { ssr: false })
 
 export default function Page() {
@@ -31,7 +32,6 @@ export default function Page() {
       <div className="w-screen relative" style={{ height: '225vh' }} >
         <div className="sticky h-screen w-screen z-40 top-0 snap-y" ref={homeRef}>
           <Canvas
-            shadows
             dpr={dpr}
             camera={{
               position: [0, 0, 20],
@@ -40,12 +40,21 @@ export default function Page() {
             style={{ width: '100vw', height: '100vh' }}
           >
             <PerformanceMonitor
-              onChange={({ factor }) => setDPR(homeInView ? Math.floor(2 + 2 * factor) : 0.5)}
+              onChange={({ factor }) =>
+                setDPR(homeInView ? Math.floor(2 + 2 * factor) : 0.5)}
             />
-            <M1 />
+            <ThreeHeader />
+            <Suspense fallback={null}>
+              <M1 />
+            </Suspense>
+            <Environment frames={1} resolution={256} blur={1}>
+              <Lightformer form="rect" intensity={.4} color="#d2defc" scale={[10, 10]} position={[0, 5, 0]} target={[0, 0, 0]} />
+              <Lightformer form="rect" intensity={.05} color="#dce5fc" scale={[10, 10]} position={[0, -10, 0]} target={[0, 0, 0]} />
+              <Lightformer form="rect" intensity={.2} color="#dce5fc" scale={[10, 10, 10]} position={[-10, 0, 0]} target={[0, 0, 0]} />
+              <Lightformer form="rect" intensity={.2} color="#f5f8ff" scale={[10, 10, 10]} position={[10, 0, 0]} target={[0, 0, 0]} />
+              <Lightformer form="rect" intensity={0.15} color="#e3eafa" scale={[10, 15, 1]} position={[0, 0, 15]} target={[0, 0, 0]} />
+            </Environment>
             <color attach='background' args={['black']} />
-            <ambientLight intensity={0.5} />
-            <Environment resolution={64} files='/env.hdr' />
             <fog attach='fog' args={['black', 20, 40]} />
           </Canvas>
         </div>

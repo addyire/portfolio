@@ -4,7 +4,7 @@ import { useContext, useRef, useState } from "react"
 import { IoIosMenu, IoLogoGithub, IoLogoLinkedin } from "react-icons/io"
 import AnimatedHeader from "../animations/AnimatedHeader"
 import { useRouter } from "next/navigation"
-import { scrollContext } from "../dom/Layout"
+import { ScrollContext } from "@/helpers/context"
 
 const NavItemText = ({ children, bright }) =>
   <a key={children} className={bright ? 'text-white' : 'text-gray-400' + ' cursor-pointer duration-200 transition-all'}>{children}</a>
@@ -14,7 +14,7 @@ const Navbar = ({ viewing }) => {
   const [expanded, setExpanded] = useState()
   const [hoveredPage, setHoveredPage] = useState()
 
-  const { scroll } = useContext(scrollContext)
+  const { scroll } = useContext(ScrollContext)
 
   const navRef = useRef()
   const homeRef = useRef()

@@ -1,10 +1,9 @@
 'use client'
 
-import { createContext, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import dynamic from 'next/dynamic'
+import { ScrollContext } from '@/helpers/context'
 const Scene = dynamic(() => import('@/components/canvas/Scene'), { ssr: false })
-
-export const scrollContext = createContext()
 
 const Layout = ({ children }) => {
   const ref = useRef()
@@ -17,6 +16,9 @@ const Layout = ({ children }) => {
 
     const onScroll = () =>
       scroll.pageProgress = ref.current.scrollTop / window.innerHeight
+
+    // initial call incase browser saves scroll position on reload
+    onScroll()
 
     ref.current.addEventListener('scroll', onScroll)
     return () => ref.current?.removeEventListener('scroll', onScroll)
@@ -35,9 +37,9 @@ const Layout = ({ children }) => {
         scrollBehavior: 'smooth',
       }}
     >
-      <scrollContext.Provider value={scroll}>
+      <ScrollContext.Provider value={scroll}>
         {children}
-      </scrollContext.Provider>
+      </ScrollContext.Provider>
       <Scene
         style={{
           position: 'fixed',

@@ -3,7 +3,7 @@ import Image from "next/image"
 const AboutMe = () => {
   return <div className="flex flex-wrap md:flex-nowrap justify-center w-full items-center my-8 md:my-16">
     <div className="relative p-8">
-      <Image src="/memoji-1.png" width={256} height={256} />
+      <Image alt="Addy Ireland profile picture" src="/memoji-1.png" width={256} height={256} />
     </div>
     <div className="text-sm max-w-xl space-y-2">
       <h1 className="text-2xl font-normal text-white">I{"'"}m a <a className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-red-500">Software Engineer</a>.</h1>

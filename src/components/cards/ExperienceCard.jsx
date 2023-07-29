@@ -11,7 +11,7 @@ const ExperienceCard = ({ side = "left", inView, logo, title, subtitle, text }) 
         <GradientCard>
           <div className="space-y-4">
             <div className='flex items-center'>
-              {logo && <Image src={logo} width={256} height={256} className={'object-fit w-16 h-16 rounded-lg shadow'} />}
+              {logo && <Image alt="Company Logo" src={logo} width={256} height={256} className={'object-fit w-16 h-16 rounded-lg shadow'} />}
               <div className="mx-4">
                 <h1 className="font-bold text-xl">{title}</h1>
                 <h2 className="text-sm text-gray-600">{subtitle}</h2>
