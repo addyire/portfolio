@@ -1,17 +1,14 @@
 'use client'
 
-import { Html, useGLTF, useTexture, useVideoTexture } from '@react-three/drei'
+import { useGLTF, useTexture, useVideoTexture } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Suspense, forwardRef, useContext, useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { scrollContext } from '../dom/Layout'
-import { ScrollText, ScrollTextElement } from '../animations/ScrollingText'
-import TypingText from '../animations/TypingText'
 import { ScrollContext } from '@/helpers/context'
 
 const { damp } = THREE.MathUtils
 
-const VideoTexture = forwardRef((_, ref) => {
+const VideoTextureNoRef = (_, ref) => {
   const texture = useVideoTexture('/laptop-video.webm', {
     muted: true,
     loop: true,
@@ -21,7 +18,9 @@ const VideoTexture = forwardRef((_, ref) => {
   })
 
   return <meshBasicMaterial map={texture} ref={ref} toneMapped={false} />
-})
+}
+
+const VideoTexture = forwardRef(VideoTextureNoRef)
 
 const ImageTexture = () => {
   const texture = useTexture('/laptop-image.jpg')
