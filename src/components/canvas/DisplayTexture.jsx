@@ -19,7 +19,6 @@ const NewVideoTexture = (_, ref) => {
   const scroll = useContext(ScrollContext)
 
   const imageTexture = useTexture('/laptop-image.jpg')
-  const [videoTexture, setVideoTexture] = useState()
   const [texture, setTexture] = useState(imageTexture)
 
   useEffect(() => {
@@ -33,27 +32,24 @@ const NewVideoTexture = (_, ref) => {
     video.appendChild(createVideoSource('/laptop-video.mp4', 'video/mp4'))
 
     const videoTexture = new THREE.VideoTexture(video)
-    setVideoTexture(videoTexture)
 
     const onCanPlay = () => setTexture(videoTexture)
-    video.addEventListener('canplay', onCanPlay)
+    video.addEventListener('loadstart', onCanPlay)
 
-    video.addEventListener('playing', () => console.log('playing'))
-
-    return () => video.removeEventListener('canplay', onCanPlay)
+    return () => video.removeEventListener('loadstart', onCanPlay)
   }, [])
 
   useFrame(() => {
     const sp = scroll.pageProgress
 
     // start playing when laptop begins opening
-    if (sp !== 0 && videoTexture?.image.paused && !autoPlayTried)
-      videoTexture.image.play()
+    if (sp !== 0 && texture?.image?.paused && !autoPlayTried) {
+      texture.image.play()
         .catch(_ => {
-          console.log('err')
           autoPlayTried = true
-          setTexture(imageTexture)
+          console.log('error auto playing')
         })
+    }
   })
 
   return <meshBasicMaterial map={texture} ref={ref} toneMapped={false} />

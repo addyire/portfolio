@@ -49,8 +49,10 @@ const Navbar = ({ viewing }) => {
       marginBottom: expanded ? 'calc(62px - 100vh)' : '0',
     }}
   >
-    <div className="flex justify-center items-center p-4 w-full">
-      <div className="flex mr-auto items-center justify-center">
+    <div className="flex justify-center items-center px-4 w-full">
+      <div
+        className="flex mr-auto items-center justify-center py-4 z-[51]"
+      >
         <div className="md:max-w-0 max-w-[3rem] transition-all overflow-hidden duration-200 delay-200">
           <div
             className="group border border-white mr-4 overflow-hidden p-0.5 bg-black hover:bg-white transition-all cursor-pointer"
