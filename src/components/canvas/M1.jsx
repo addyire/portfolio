@@ -1,27 +1,13 @@
 'use client'
 
-import { useGLTF, useTexture } from '@react-three/drei'
+import { useGLTF } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Suspense, useContext, useRef } from 'react'
+import { useContext, useRef } from 'react'
 import * as THREE from 'three'
 import { ScrollContext } from '@/helpers/context'
-import dynamic from 'next/dynamic'
+import DisplayTexture from './DisplayTexture'
 
 const { damp } = THREE.MathUtils
-
-const VideoTexture = dynamic(() =>
-  import('@/components/canvas/VideoTexture'),
-  {
-    loading: () => <ImageTexture />,
-    ssr: false,
-  }
-)
-
-const ImageTexture = () => {
-  const texture = useTexture('/laptop-image.jpg')
-
-  return <meshBasicMaterial map={texture} toneMapped={false} />
-}
 
 export const M1 = ({ ...props }) => {
   const { nodes, materials } = useGLTF('/14mbp.glb')
@@ -38,6 +24,7 @@ export const M1 = ({ ...props }) => {
   // refs
   const mbp = useRef()
   const mbpScreen = useRef()
+  const displayRef = useRef()
   const myscroll = useContext(ScrollContext)
 
   // scaling
@@ -56,6 +43,12 @@ export const M1 = ({ ...props }) => {
     mbpScreen.current.rotation.x = dampedOpen
     camera.position.setZ(dampedZoomIn)
     camera.position.setY(dampedCameraY)
+
+    // hide video when not in view
+    if (displayRef.current && dampedOpen < -.15 && myscroll.pageProgress < 2.25)
+      displayRef.current.visible = true
+    else if (displayRef.current && displayRef.current.visible)
+      displayRef.current.visible = false
   })
 
   return (
@@ -71,7 +64,7 @@ export const M1 = ({ ...props }) => {
           </group>
           <mesh geometry={nodes.rubber1_rubber_0.geometry} material={materials.PaletteMaterial001} />
           <mesh geometry={nodes.screen_screen_M_0.geometry} >
-            <VideoTexture />
+            <DisplayTexture ref={displayRef} />
           </mesh>
           <mesh geometry={nodes.cap_screen_frame_0.geometry} material={materials.PaletteMaterial001} />
           <mesh geometry={nodes.cap_body_M_0.geometry} material={materials.PaletteMaterial001} />
