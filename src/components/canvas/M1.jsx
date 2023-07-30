@@ -34,6 +34,10 @@ export const M1 = ({ ...props }) => {
   useFrame((_, delta) => {
     const rawScroll = Math.min(1, (myscroll.pageProgress ** 1.8) * 2)
 
+    // zoom in animation
+    const dampedLoadIn = damp(mbp.current?.position.z, 0, 8, delta)
+    mbp.current?.position.setZ(dampedLoadIn)
+
     // calculate damping
     const dampedOpen = damp(mbpScreen.current.rotation.x, (rawScroll * -Math.PI) / 2, 10, delta)
     const dampedZoomIn = damp(camera.position.z, 20 - 5 * rawScroll + aspectModifier, 8, delta)
@@ -52,7 +56,7 @@ export const M1 = ({ ...props }) => {
   })
 
   return (
-    <group {...props} ref={mbp} position={[0, -2.85, 0]} scale={scale} dispose={null}>
+    <group {...props} ref={mbp} position={[0, -2.85, -20]} scale={scale} dispose={null}>
       <group ref={mbpScreen} position={[0, 0.7, -10.8]}>
         <group rotation={[0, 0, 0]} position={[0, -0.7, 10.8]}>
           <mesh geometry={nodes.apple_apple_logo_M_0.geometry} material={materials.PaletteMaterial001} />
