@@ -5,11 +5,16 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useContext, useRef } from 'react'
 import * as THREE from 'three'
 import { ScrollContext } from '@/helpers/context'
+
+import useAspect from '@/helpers/hooks/useAspect'
 import DisplayTexture from './DisplayTexture'
 
 const { damp } = THREE.MathUtils
 
+const ScaleVector = new THREE.Vector3(0, 0, 0)
+
 export const M1 = ({ ...props }) => {
+  // loading the model
   const { nodes, materials } = useGLTF('/14mbp.glb')
 
   // materials
@@ -18,21 +23,26 @@ export const M1 = ({ ...props }) => {
   materials.PaletteMaterial001.envMapIntensity = 1.75
 
   // three stuff
-  const { aspect } = useThree((state) => state.viewport)
   const camera = useThree((state) => state.camera)
 
   // refs
   const mbp = useRef()
   const mbpScreen = useRef()
   const displayRef = useRef()
+
+  // scroll context
   const myscroll = useContext(ScrollContext)
 
-  // scaling
-  const scale = Math.min(0.325, 0.2 * aspect)
-  const aspectModifier = Math.min(0, aspect - 1.4) * 2
+  // get aspect ratio because drei View messes it up
+  const aspectObj = useAspect()
 
   useFrame((_, delta) => {
-    const rawScroll = Math.min(1, (myscroll.pageProgress ** 1.8) * 2)
+    const { aspect } = aspectObj
+
+    // scale modifier
+    const aspectModifier = Math.min(0, aspect - 1.4) * 2
+
+    const rawScroll = Math.min(1, myscroll.pageProgress ** 1.8 * 2)
 
     // zoom in animation
     const dampedLoadIn = damp(mbp.current?.position.z, 0, 8, delta)
@@ -42,21 +52,24 @@ export const M1 = ({ ...props }) => {
     const dampedOpen = damp(mbpScreen.current.rotation.x, (rawScroll * -Math.PI) / 2, 10, delta)
     const dampedZoomIn = damp(camera.position.z, 20 - 5 * rawScroll + aspectModifier, 8, delta)
     const dampedCameraY = damp(camera.position.y, 0 + aspectModifier * rawScroll, 10, delta)
+    const dampedScale = damp(mbp.current.scale.x, Math.min(0.325, 0.2 * aspect), 15, delta)
+
+    // apply scale
+    ScaleVector.set(dampedScale, dampedScale, dampedScale)
+    mbp.current.scale.copy(ScaleVector)
 
     // apply damping
     mbpScreen.current.rotation.x = dampedOpen
     camera.position.setZ(dampedZoomIn)
     camera.position.setY(dampedCameraY)
 
-    // hide video when not in view
-    if (displayRef.current && dampedOpen < -.15 && myscroll.pageProgress < 2.25)
-      displayRef.current.visible = true
-    else if (displayRef.current && displayRef.current.visible)
-      displayRef.current.visible = false
+    // hiding video when not in view
+    if (displayRef.current && dampedOpen < -0.15 && myscroll.pageProgress < 2.25) displayRef.current.visible = true
+    else if (displayRef.current && displayRef.current.visible) displayRef.current.visible = false
   })
 
   return (
-    <group {...props} ref={mbp} position={[0, -2.85, -20]} scale={scale} dispose={null}>
+    <group {...props} ref={mbp} position={[0, -2.85, -20]} scale={0.2} dispose={null}>
       <group ref={mbpScreen} position={[0, 0.7, -10.8]}>
         <group rotation={[0, 0, 0]} position={[0, -0.7, 10.8]}>
           <mesh geometry={nodes.apple_apple_logo_M_0.geometry} material={materials.PaletteMaterial001} />
@@ -67,7 +80,7 @@ export const M1 = ({ ...props }) => {
             <mesh geometry={nodes.cam_camera_M_0.geometry} material={materials.camera_M} />
           </group>
           <mesh geometry={nodes.rubber1_rubber_0.geometry} material={materials.PaletteMaterial001} />
-          <mesh geometry={nodes.screen_screen_M_0.geometry} >
+          <mesh geometry={nodes.screen_screen_M_0.geometry}>
             <DisplayTexture ref={displayRef} />
           </mesh>
           <mesh geometry={nodes.cap_screen_frame_0.geometry} material={materials.PaletteMaterial001} />

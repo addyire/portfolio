@@ -1,26 +1,17 @@
-const { useState, useEffect } = require("react")
-const { IoIosArrowDown } = require("react-icons/io")
+import { IoIosArrowDown } from 'react-icons/io'
 
-const ScrollHint = ({ show }) => {
-  const [shown, setShown] = useState(true)
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShown(true)
-    }, 1000)
-
-    return () => clearTimeout(timeout)
-  })
-
-  return <div
-    className="flex flex-col text-gray-500 items-center justify-center p-8 fixed bottom-0 left-1/2 -translate-x-1/2 transition-all z-50"
+const ScrollHint = ({ show, onClick }) =>
+  <div
+    className="fixed bottom-0 left-1/2 -translate-x-1/2 p-4 cursor-pointer text-gray-500 flex flex-col justify-center items-center z-[100] transition-all duration-300 text-sm"
     style={{
-      opacity: show && shown ? '100%' : '0%',
+      opacity: show === true ? 1 : 0,
+      pointerEvents: show === true ? 'all' : 'none',
     }}
+    onPointerDown={onClick}
   >
-    <p className="">scroll down</p>
-    <IoIosArrowDown size="1rem" />
+    <div>scroll down</div>
+    <IoIosArrowDown size={'1rem'} />
   </div>
-}
+
 
 export default ScrollHint
