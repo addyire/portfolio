@@ -16,7 +16,7 @@ const M1 = dynamic(() => import('@/components/canvas/M1').then((mod) => mod.M1),
 
 export default function Page() {
   const [viewing, setViewing] = useState('home')
-  const [dpr, setDPR] = useState(2)
+  const [dpr, setDPR] = useState(1.5)
 
   const [homeRef, homeInView] = useInView({ threshold: 0.1, onChange: (v) => v && setViewing('home') })
   const [aboutMeRef] = useInView({ threshold: 0.5, onChange: (v) => v && setViewing('aboutme') })
@@ -25,7 +25,7 @@ export default function Page() {
 
   // set low dpr when not looking at home
   useEffect(() => {
-    setDPR(homeInView ? 2 : 0.5)
+    setDPR(homeInView ? 1.5 : 0.5)
   }, [homeInView])
 
   return (
@@ -42,7 +42,7 @@ export default function Page() {
           >
             <PerformanceMonitor
               onChange={({ factor }) =>
-                setDPR(homeInView ? Math.floor(2 + 2 * factor) : 0.5)}
+                setDPR(homeInView ? Math.floor(1 + 3 * factor) : 0.5)}
             />
             <Preload all />
             <ThreeHeader />

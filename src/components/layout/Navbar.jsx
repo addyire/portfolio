@@ -31,7 +31,7 @@ const Navbar = ({ viewing }) => {
   const mobileNavTo = (section) => {
     setExpanded(false)
 
-    setTimeout(() => navTo(section), 500)
+    setTimeout(() => navTo(section), 200)
   }
 
   const navTo = (section) => {
@@ -131,7 +131,7 @@ const Navbar = ({ viewing }) => {
           }}
         />
       </div>
-      <div className="flex space-x-2 ml-auto">
+      <div className="flex space-x-2 ml-auto z-[51]">
         <IoLogoLinkedin
           className="text-gray-400 hover:text-white transition-all cursor-pointer"
           size={'1.5rem'}
