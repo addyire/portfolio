@@ -6,12 +6,9 @@ import { useContext, useRef } from 'react'
 import * as THREE from 'three'
 import { ScrollContext } from '@/helpers/context'
 
-import useAspect from '@/helpers/hooks/useAspect'
 import DisplayTexture from './DisplayTexture'
 
 const { damp } = THREE.MathUtils
-
-const ScaleVector = new THREE.Vector3(0, 0, 0)
 
 export const M1 = ({ ...props }) => {
   // loading the model
@@ -24,6 +21,7 @@ export const M1 = ({ ...props }) => {
 
   // three stuff
   const camera = useThree((state) => state.camera)
+  const { aspect } = useThree(state => state.viewport)
 
   // refs
   const mbp = useRef()
@@ -34,14 +32,11 @@ export const M1 = ({ ...props }) => {
   const myscroll = useContext(ScrollContext)
 
   // get aspect ratio because drei View messes it up
-  const aspectObj = useAspect()
+  const aspectModifier = Math.min(0, aspect - 1.4) * 2
+  const scale = Math.min(0.325, 0.2 * aspect)
 
   useFrame((_, delta) => {
-    const { aspect } = aspectObj
-
-    // scale modifier
-    const aspectModifier = Math.min(0, aspect - 1.4) * 2
-
+    // get scroll progress
     const rawScroll = Math.min(1, myscroll.pageProgress ** 1.8 * 2)
 
     // zoom in animation
@@ -51,12 +46,7 @@ export const M1 = ({ ...props }) => {
     // calculate damping
     const dampedOpen = damp(mbpScreen.current.rotation.x, (rawScroll * -Math.PI) / 2, 10, delta)
     const dampedZoomIn = damp(camera.position.z, 20 - 5 * rawScroll + aspectModifier, 8, delta)
-    const dampedCameraY = damp(camera.position.y, 0 + aspectModifier * rawScroll, 10, delta)
-    const dampedScale = damp(mbp.current.scale.x, Math.min(0.325, 0.2 * aspect), 15, delta)
-
-    // apply scale
-    ScaleVector.set(dampedScale, dampedScale, dampedScale)
-    mbp.current.scale.copy(ScaleVector)
+    const dampedCameraY = damp(camera.position.y, aspectModifier * 2 / 5 + aspectModifier * rawScroll * 3 / 5, 10, delta)
 
     // apply damping
     mbpScreen.current.rotation.x = dampedOpen
@@ -69,7 +59,7 @@ export const M1 = ({ ...props }) => {
   })
 
   return (
-    <group {...props} ref={mbp} position={[0, -2.85, -20]} scale={0.2} dispose={null}>
+    <group {...props} ref={mbp} position={[0, -2.85, -20]} scale={scale} dispose={null}>
       <group ref={mbpScreen} position={[0, 0.7, -10.8]}>
         <group rotation={[0, 0, 0]} position={[0, -0.7, 10.8]}>
           <mesh geometry={nodes.apple_apple_logo_M_0.geometry} material={materials.PaletteMaterial001} />

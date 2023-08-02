@@ -6,11 +6,11 @@ import { ScrollContext } from '@/helpers/context'
 import ScrollHint from '../ScrollHint'
 const Scene = dynamic(() => import('@/components/canvas/Scene'), { ssr: false })
 
-const SCROLL_HINT_DELAY = 1500
+const SCROLL_HINT_DELAY = 2500
 
 const Layout = ({ children }) => {
   const ref = useRef()
-  const scroll = useMemo(() => ({ pageProgress: 0, scroll: () => {}, loaded: false }), [])
+  const scroll = useMemo(() => ({ pageProgress: 0, scroll: () => { }, loaded: false }), [])
 
   // undefined - initializing
   // true - show
@@ -45,7 +45,7 @@ const Layout = ({ children }) => {
     scroll.loaded = true
 
     // setup event listener
-    ref.current.addEventListener('scroll', onScroll)
+    ref.current.addEventListener('scroll', onScroll, { passive: true })
     return () => ref.current?.removeEventListener('scroll', onScroll)
   }, [scroll, showScrollHint])
 
