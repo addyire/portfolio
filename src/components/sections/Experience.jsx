@@ -43,7 +43,7 @@ const Experience = () => {
             inView={exp2InView}
             side='right'
             title='Nest Genomics (YC W22)'
-            subtitle='October 2021 - March 2022'
+            subtitle='June 2025 - September 2025'
             text='Modernized internal tooling by migrating a legacy admin app, replacing raw SQL with GraphQL APIs, and shipping performance improvements and features across a production Next.js application.'
             logo='/experience/nest-genomics.png'
           />
@@ -63,8 +63,8 @@ const Experience = () => {
           <ExperienceCard
             inView={exp4InView}
             side='right'
-            title='MatSci Repository Semantics Research'
-            subtitle='July 2023 - Current'
+            title='Research Assistant'
+            subtitle='July 2023 - December 2023'
             text='Investigating metadata infrastructures across materials science repositories, specifically looking at the terminological representation used. '
             logo='/experience/drexel.png'
           />
