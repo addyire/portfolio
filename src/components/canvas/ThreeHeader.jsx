@@ -7,8 +7,12 @@ import { useFrame, useThree } from '@react-three/fiber'
 import TypingText from '../animations/TypingText'
 import { ScrollContext } from '@/helpers/context'
 import { Html } from '@react-three/drei'
+import { differenceInYears } from 'date-fns'
 
 const { damp } = THREE.MathUtils
+
+const birthday = new Date(1072684800000) // 12/29/2003
+
 
 const ThreeHeader = () => {
   const scroll = useContext(ScrollContext)
@@ -28,7 +32,7 @@ const ThreeHeader = () => {
       <Html center className='flex w-screen flex-col items-center justify-center text-center'>
         <TypingText delay={1000} finalText={'Addy Ireland'} speed={100} />
         <ScrollText>
-          <ScrollTextElement>19 years old</ScrollTextElement>
+          <ScrollTextElement>{differenceInYears(new Date(), birthday)} years old</ScrollTextElement>
           <ScrollTextElement>penn state university</ScrollTextElement>
           <ScrollTextElement>computer science</ScrollTextElement>
           <ScrollTextElement>brother of alpha chi rho</ScrollTextElement>

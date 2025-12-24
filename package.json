@@ -1,9 +1,7 @@
 {
   "name": "react-three-next",
   "version": "2.0.0",
-  "authors": [
-    "Renaud ROHLINGER <https://twitter.com/onirenaud>"
-  ],
+  "authors": [],
   "license": "MIT",
   "private": true,
   "engines": {
@@ -20,9 +18,10 @@
     "@ducanh2912/next-pwa": "^8.2.0",
     "@react-three/drei": "^9.74.8",
     "@react-three/fiber": "^8.13.1",
+    "date-fns": "^4.1.0",
     "glsl-random": "^0.0.5",
     "maath": "^0.7.0",
-    "next": "^13.4.2",
+    "next": "14.2.35",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",

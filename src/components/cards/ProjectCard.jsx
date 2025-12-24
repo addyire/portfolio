@@ -6,7 +6,7 @@ const ProjectCard = ({ title, image, tech, description, children, preview, rever
 
   return (
     <div
-      className={`bg-gradient-to-r shadow-[0_0_20px_5px_rgba(255,255,255,0.2)]  from-blue-500 to-red-500 col-span-6 md:col-span-5 xl:col-span-4 p-0.5 mx-auto w-full`}
+      className={`col-span-6 mx-auto  w-full bg-gradient-to-r from-blue-500 to-red-500 p-0.5 shadow-[0_0_20px_5px_rgba(255,255,255,0.2)] md:col-span-5 xl:col-span-4`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -16,13 +16,13 @@ const ProjectCard = ({ title, image, tech, description, children, preview, rever
         backgroundPosition: hover ? '100% 0%' : '0% 0%'
       }}
     >
-      <div className="w-full bg-black grid grid-cols-3 p-4 gap-4 md:gap-16">
-        <div className={`flex flex-col col-span-3 space-y-4 md:col-span-2 ${reverse && 'md:text-end md:order-2'}`}>
+      <div className="grid w-full grid-cols-3 gap-4 bg-black p-4 md:gap-16">
+        <div className={`col-span-3 flex flex-col space-y-4 md:col-span-2 ${reverse && 'md:order-2 md:text-end'}`}>
           <div className="grow space-y-4">
-            <div className={`flex items-center ${reverse && ' md:text-end md:flex-row-reverse '}`}>
-              <Image alt="Project logo" src={image} width={256} height={256} className={'object-fit w-16 h-16 rounded-md shadow'} />
+            <div className={`flex items-center ${reverse && ' md:flex-row-reverse md:text-end '}`}>
+              <Image alt="Project logo" src={image} width={256} height={256} className="object-fit h-16 w-16 rounded-md shadow" />
               <div className="mx-4">
-                <h1 className="font-bold text-xl">{title}</h1>
+                <h1 className="text-xl font-bold">{title}</h1>
                 <h2 className="text-sm text-gray-600">{tech}</h2>
               </div>
             </div>
@@ -30,8 +30,8 @@ const ProjectCard = ({ title, image, tech, description, children, preview, rever
           </div>
           {children}
         </div>
-        <div className="relative w-full col-span-3 md:col-span-1 md:h-full flex items-center justify-center">
-          <Image alt="Project preview" src={preview} width={2048} height={1024} className={`h-64 md:h-auto object-contain rounded-md md:scale-[200%] lg:scale-[175%] xl:scale-[200%] shadow md:absolute ${reverse ? 'right-1/2 ' : 'left-1/2'}`} />
+        <div className="relative col-span-3 flex w-full items-center justify-center md:col-span-1 md:h-full">
+          <Image alt="Project preview" src={preview} width={2048} height={1024} className={`h-64 rounded-md object-contain shadow md:absolute md:h-auto md:scale-[200%] lg:scale-[175%] xl:scale-[200%] ${reverse ? 'right-1/2 ' : 'left-1/2'}`} />
         </div>
       </div>
     </div>

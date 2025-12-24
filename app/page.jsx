@@ -1,7 +1,7 @@
 'use client'
 
-import { PerformanceMonitor, useGLTF } from '@react-three/drei'
-import { Suspense, useEffect, useState } from 'react'
+import {  useGLTF } from '@react-three/drei'
+import {  useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import dynamic from 'next/dynamic'
 
@@ -23,7 +23,7 @@ export default function Page() {
   return (
     <div className='w-screen'>
       <div className='relative h-[225vh] w-screen'>
-        <div ref={homeRef} className="sticky top-0 w-screen h-screen">
+        <div ref={homeRef} className="sticky top-0 h-screen w-screen">
           <HomeScene />
         </div>
       </div>
